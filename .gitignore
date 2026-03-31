@@ -1,0 +1,18 @@
+# Môi trường ảo
+.venv/
+venv/
+env/
+
+# File cache của Python
+__pycache__/
+*.pyc
+*.pyo
+
+# CSDL cục bộ (nếu có dùng SQLite)
+db.sqlite3
+
+# Thư mục Media (Không đẩy ảnh, video tải lên của người dùng lên Github)
+media/
+
+# File thiết lập của VS Code
+.vscode/
