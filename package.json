@@ -1,0 +1,23 @@
+{
+  "name": "website-django-e-learning",
+  "version": "1.0.0",
+  "description": "Dự án hệ thống học trực tuyến E-learning xây dựng bằng Django.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning/issues"
+  },
+  "homepage": "https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

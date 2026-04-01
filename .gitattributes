@@ -1,0 +1,13 @@
+# Buộc tất cả file JS, TS, JSON, CSS, HTML dùng LF
+* text=auto eol=lf
+
+# Hoặc cụ thể hơn (an toàn hơn)
+node_modules/**          text=auto eol=lf
+*.js                     text=auto eol=lf
+*.ts                     text=auto eol=lf
+*.json                   text=auto eol=lf
+*.css                    text=auto eol=lf
+*.html                   text=auto eol=lf
+tailwind.config.js       text=auto eol=lf
+package.json             text=auto eol=lf
+package-lock.json        text=auto eol=lf
