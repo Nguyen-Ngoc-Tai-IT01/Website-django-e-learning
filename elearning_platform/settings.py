@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure--x8$b8k%y@bxa*mvs4_y^dlo2)2w)1^j(5h==xj)r!dm+54-$+'
+SECRET_KEY = 'django-insecure-w+y!_p!tnnm@=13g!@h6p7+zb=y$-+^fxzajsnm%8-upg)le49'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,8 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core',
-    'courses',
     'users',
+    'courses',
     'instructor',
 ]
 
@@ -58,7 +58,7 @@ ROOT_URLCONF = 'elearning_platform.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,6 +129,16 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# Cấu hình thư mục static
+STATICFILES_DIRS = [BASE_DIR / 'static']
+
+# Cấu hình thư mục media (lưu trữ video, giáo án tải lên)
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# ÉP DJANGO SỬ DỤNG CUSTOM USER TỪ APP 'USERS' NGAY TỪ ĐẦU
+AUTH_USER_MODEL = 'users.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

@@ -1,25 +1,48 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Learning Platform</title>
-    
-    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <title>{% block title %}Tài E-Learning{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'dist/output.css' %}">
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body class="bg-[#0B1120] text-slate-300 font-sans antialiased selection:bg-blue-500 selection:text-white">
+    
+    <nav class="sticky top-0 z-50 w-full backdrop-blur-md bg-[#0B1120]/80 border-b border-slate-800 transition-colors duration-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">T</div>
+                    <a href="/" class="text-white font-bold text-xl tracking-tight">Tài Platform</a>
+                </div>
 
-    <nav class="bg-blue-600 p-4 text-white shadow-md">
-        <div class="max-w-6xl mx-auto font-bold text-xl">
-            My E-Learning
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Khóa học</a>
+                        <a href="#" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Lộ trình</a>
+                        <a href="#" class="text-slate-300 hover:text-white transition-colors text-sm font-medium">Tài liệu</a>
+                    </div>
+                </div>
+
+                <div>
+                    <a href="/admin" class="text-sm font-medium text-white bg-slate-800/50 hover:bg-slate-700 px-5 py-2 rounded-full border border-slate-700 transition-all">
+                        Đăng nhập
+                    </a>
+                </div>
+            </div>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto mt-8 p-4">
+    <main>
         {% block content %}
         {% endblock %}
     </main>
+
+    <footer class="border-t border-slate-800 mt-20 py-10 text-center text-sm text-slate-500">
+        &copy; 2026 Tài E-Learning. Nền tảng học trực tuyến hiện đại.
+    </footer>
 
 </body>
 </html>

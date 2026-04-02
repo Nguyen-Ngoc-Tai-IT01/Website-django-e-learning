@@ -1,23 +1,18 @@
 {
   "name": "website-django-e-learning",
   "version": "1.0.0",
-  "description": "Dự án hệ thống học trực tuyến E-learning xây dựng bằng Django.",
+  "description": "Dự án E-learning Django",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning.git"
+    "dev": "npx tailwindcss -i ./static/src/input.css -o ./static/dist/output.css --watch",
+    "build": "npx tailwindcss -i ./static/src/input.css -o ./static/dist/output.css"
   },
   "keywords": [],
-  "author": "",
+  "author": "Nguyễn Ngọc Tài",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning/issues"
-  },
-  "homepage": "https://github.com/Nguyen-Ngoc-Tai-IT01/Website-django-e-learning#readme",
-  "devDependencies": {
-    "tailwindcss": "^3.4.19"
+  "dependencies": {
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.18"
   }
 }
