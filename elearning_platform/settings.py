@@ -134,7 +134,7 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Cấu hình thư mục media (lưu trữ video, giáo án tải lên)
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 # ÉP DJANGO SỬ DỤNG CUSTOM USER TỪ APP 'USERS' NGAY TỪ ĐẦU

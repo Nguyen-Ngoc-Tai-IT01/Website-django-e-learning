@@ -1,0 +1,102 @@
+{% extends 'base.html' %} {% block title %}Đăng ký | Tài Platform{% endblock %}
+{% block content %}
+<div
+  class="min-h-[calc(100vh-4rem)] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 -mt-10"
+>
+  <div
+    class="absolute w-[500px] h-[500px] bg-purple-600/10 blur-[100px] rounded-full pointer-events-none"
+  ></div>
+
+  <div
+    class="max-w-md w-full space-y-8 bg-slate-800/40 backdrop-blur-xl p-10 rounded-3xl border border-slate-700/50 shadow-2xl relative z-10"
+  >
+    <div>
+      <h2
+        class="mt-2 text-center text-3xl font-extrabold text-white tracking-tight"
+      >
+        Tạo tài khoản mới
+      </h2>
+      <p class="mt-2 text-center text-sm text-slate-400">
+        Đã có tài khoản?
+        <a
+          href="{% url 'users:login' %}"
+          class="font-medium text-blue-400 hover:text-blue-300 transition"
+          >Đăng nhập</a
+        >
+      </p>
+    </div>
+
+    <form class="mt-8 space-y-5" action="#" method="POST">
+      {% csrf_token %}
+      <div>
+        <label
+          for="username"
+          class="block text-sm font-medium text-slate-300 mb-1"
+          >Tên đăng nhập</label
+        >
+        <input
+          id="username"
+          name="username"
+          type="text"
+          required
+          value="{{ old_username|default:'' }}"
+          class="appearance-none block w-full px-4 py-3 border border-slate-600 bg-slate-900/50 placeholder-slate-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+        />
+      </div>
+
+      <div>
+        <label for="email" class="block text-sm font-medium text-slate-300 mb-1"
+          >Email</label
+        >
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          value="{{ old_email|default:'' }}"
+          class="appearance-none block w-full px-4 py-3 border border-slate-600 bg-slate-900/50 placeholder-slate-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+        />
+      </div>
+
+      <div>
+        <label
+          for="password"
+          class="block text-sm font-medium text-slate-300 mb-1"
+          >Mật khẩu</label
+        >
+        <input
+          id="password"
+          name="password"
+          type="password"
+          required
+          class="appearance-none block w-full px-4 py-3 border border-slate-600 bg-slate-900/50 placeholder-slate-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+        />
+      </div>
+
+      <div>
+        <label
+          for="confirm_password"
+          class="block text-sm font-medium text-slate-300 mb-1"
+          >Xác nhận mật khẩu</label
+        >
+        <input
+          id="confirm_password"
+          name="confirm_password"
+          type="password"
+          required
+          class="appearance-none block w-full px-4 py-3 border border-slate-600 bg-slate-900/50 placeholder-slate-500 text-white rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition-all"
+        />
+      </div>
+
+      <div>
+        <button
+          type="submit"
+          class="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 focus:ring-offset-slate-900 transition-all shadow-[0_0_15px_rgba(37,99,235,0.4)] mt-2"
+        >
+          Đăng ký tài khoản
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

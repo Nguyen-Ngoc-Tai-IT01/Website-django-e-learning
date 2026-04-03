@@ -53,7 +53,20 @@ class Lesson(models.Model):
     video_url = models.URLField(blank=True, null=True, help_text="Link video YouTube hoặc server lưu trữ")
     document = models.FileField(upload_to='lesson_docs/', null=True, blank=True, help_text="File tài liệu đính kèm (PDF, DOCX)")
     order = models.PositiveIntegerField(default=0)
-
+    @property
+    def embed_video_url(self):
+        if not self.video_url:
+            return ""
+        url = self.video_url
+        if "youtu.be/" in url:
+            video_id = url.split("youtu.be/")[1].split("?")[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif "watch?v=" in url:
+            video_id = url.split("watch?v=")[1].split("&")[0]
+            return f"https://www.youtube.com/embed/{video_id}"
+        elif "embed/" in url:
+            return url
+        return ""
     class Meta:
         ordering = ['order']
 

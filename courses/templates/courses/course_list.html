@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% block title %}Danh sách Khóa học | Tài Platform{%endblock %} {% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div class="mb-12">
+    <h1 class="text-3xl font-extrabold text-white tracking-tight">
+      Khám Phá Khóa Học
+    </h1>
+    <p class="mt-2 text-slate-400">
+      Bắt đầu hành trình chinh phục công nghệ của bạn ngay hôm nay.
+    </p>
+  </div>
+
+  <div class="mt-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    {% for course in courses %}
+    <div
+      class=" bg-slate-800/40 border border-slate-700/50 rounded-2xl overflow-hidden hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 flex flex-col"
+    >
+      <div class="relative h-52 overflow-hidden bg-slate-900">
+        {% if course.thumbnail %}
+        <img
+          src="{{ course.thumbnail.url }}"
+          alt="{{ course.title }}"
+          class="w-full h-full object-cover"
+        />
+        {% else %}
+        <div
+          class="w-full h-full flex items-center justify-center text-slate-600 font-bold"
+        >
+          No image
+        </div>
+        {% endif %}
+      </div>
+
+      <div class="p-6 flex flex-col flex-grow">
+        <span
+          class="inline-block w-max px-3 py-1 bg-blue-500/10 text-blue-400 border border-blue-500/20 text-xs font-semibold rounded-full mb-4"
+        >
+          {{ course.category.title|default:"Chưa phân loại" }}
+        </span>
+
+        <h3 class="text-xl font-bold text-white mb-3 line-clamp-2 leading-snug">
+          {{ course.title }}
+        </h3>
+
+        <p class="text-slate-400 text-sm mb-6 line-clamp-2 flex-grow">
+          {{ course.description|default:"Chưa có mô tả cho khóa học này." }}
+        </p>
+
+        <div
+          class="flex items-center justify-between border-t border-slate-700/50 pt-4 mt-auto"
+        >
+          <div class="text-lg font-bold text-emerald-400">
+            Miễn phí
+          </div>
+
+          <a
+            href="{% url 'courses:course_detail' course.slug %}"
+            class="text-sm font-medium text-white bg-slate-700 hover:bg-blue-600 px-4 py-2 rounded-lg transition-colors"
+          >
+            Xem chi tiết
+          </a>
+        </div>
+      </div>
+    </div>
+
+    {% empty %}
+    <div class="col-span-full text-center py-12">
+      <svg
+        class="mx-auto h-12 w-12 text-slate-500 mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+        ></path>
+      </svg>
+      <h3 class="text-lg font-medium text-slate-300">Chưa có khóa học nào</h3>
+      <p class="text-slate-500 mt-1">
+        Hệ thống đang cập nhật các khóa học mới.
+      </p>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
