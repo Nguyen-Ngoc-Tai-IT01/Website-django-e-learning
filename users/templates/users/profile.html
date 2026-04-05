@@ -1,0 +1,225 @@
+{% extends 'base.html' %} {% block title %}Hồ sơ cá nhân | E-Learning{% endblock
+%} {% block content %}
+<div
+  class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-32 min-h-screen"
+>
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-white tracking-tight">Hồ sơ học tập</h1>
+    <p class="text-slate-400 mt-2">Quản lý thông tin và tiến độ của bạn</p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-1 space-y-6">
+      <div
+        class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 text-center shadow-xl"
+      >
+        <div class="flex justify-center items-center mb-5">
+          <div
+            class="bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-full flex items-center justify-center text-4xl font-bold text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] border-4 border-slate-800 shrink-0"
+            style="width: 120px; height: 120px"
+          >
+            {{ user.username.0|upper }}
+          </div>
+        </div>
+
+        <h2 class="text-2xl font-bold text-white">{{ user.username }}</h2>
+        <p class="text-slate-400 text-sm mt-1">{{ user.email }}</p>
+
+        <div class="mt-6 pt-6 border-t border-slate-700/50">
+          <button
+            class="w-full bg-slate-700/50 hover:bg-slate-700 text-white font-medium py-2.5 rounded-xl transition-colors border border-slate-600"
+          >
+            Chỉnh sửa thông tin
+          </button>
+        </div>
+      </div>
+
+      <div
+        class="bg-slate-800/40 border border-slate-700/50 rounded-2xl p-6 shadow-xl"
+      >
+        <h3 class="text-lg font-bold text-white mb-4">Thống kê</h3>
+        <div class="space-y-4">
+          <div
+            class="flex items-center justify-between p-4 bg-slate-800/80 rounded-xl border border-slate-700/50"
+          >
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-blue-500/20 text-blue-400 rounded-lg">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-slate-300 font-medium">Đã hoàn thành</span>
+            </div>
+            <span class="text-xl font-bold text-white"
+              >{{ completed_count }}</span
+            >
+          </div>
+
+          <div
+            class="flex items-center justify-between p-4 bg-slate-800/80 rounded-xl border border-slate-700/50"
+          >
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-amber-500/20 text-amber-400 rounded-lg">
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  ></path>
+                </svg>
+              </div>
+              <span class="text-slate-300 font-medium">Đã lưu</span>
+            </div>
+            <span class="text-xl font-bold text-white"
+              >{{ saved_lessons|length }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-2">
+      <div
+        class="bg-slate-800/40 border border-slate-700/50 rounded-2xl shadow-xl overflow-hidden h-full"
+      >
+        <div
+          class="p-6 border-b border-slate-700/50 bg-slate-800/60 flex items-center justify-between"
+        >
+          <h2 class="text-xl font-bold text-white flex items-center gap-2">
+            <svg
+              class="w-5 h-5 text-amber-400"
+              fill="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+              ></path>
+            </svg>
+            Bài giảng đã lưu
+          </h2>
+        </div>
+
+        <div class="p-6">
+          {% if saved_lessons %}
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {% for progress in saved_lessons %}
+            <a
+              href="{% url 'courses:lesson_detail' progress.lesson.section.course.slug progress.lesson.id %}"
+              class="block group"
+            >
+              <div
+                class="bg-slate-900/50 border border-slate-700/50 rounded-xl p-4 transition-all duration-300 hover:bg-slate-800 hover:border-blue-500/50 hover:shadow-[0_0_15px_rgba(37,99,235,0.15)] relative overflow-hidden"
+              >
+                <div
+                  class="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                ></div>
+
+                <div
+                  class="text-xs font-bold text-blue-400 mb-2 uppercase tracking-wider"
+                >
+                  {{ progress.lesson.section.course.title }}
+                </div>
+
+                <h3
+                  class="text-slate-200 font-semibold group-hover:text-white transition-colors line-clamp-2 mb-3"
+                >
+                  {{ progress.lesson.title }}
+                </h3>
+
+                <div class="flex items-center text-xs text-slate-500 gap-4">
+                  <span class="flex items-center gap-1">
+                    {% if progress.is_completed %}
+                    <svg
+                      class="w-4 h-4 text-green-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M5 13l4 4L19 7"
+                      ></path>
+                    </svg>
+                    <span class="text-green-500">Đã học xong</span>
+                    {% else %}
+                    <svg
+                      class="w-4 h-4 text-amber-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                      ></path>
+                    </svg>
+                    <span class="text-amber-500">Đang học</span>
+                    {% endif %}
+                  </span>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div
+            class="flex flex-col items-center justify-center py-16 text-center"
+          >
+            <div
+              class="w-20 h-20 bg-slate-800 rounded-full flex items-center justify-center mb-4 border border-slate-700"
+            >
+              <svg
+                class="w-10 h-10 text-slate-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-medium text-slate-300 mb-2">
+              Chưa có bài giảng nào được lưu
+            </h3>
+            <p class="text-slate-500 text-sm max-w-sm">
+              Hãy học và bấm "Lưu bài" ở những nội dung quan trọng để dễ dàng ôn
+              tập lại tại đây nhé.
+            </p>
+            <a
+              href="{% url 'courses:course_list' %}"
+              class="mt-6 bg-blue-600 hover:bg-blue-500 text-white px-6 py-2.5 rounded-lg font-medium transition-colors"
+            >
+              Khám phá khóa học
+            </a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

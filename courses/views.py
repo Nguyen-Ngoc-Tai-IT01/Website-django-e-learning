@@ -1,5 +1,8 @@
 from django.shortcuts import render, get_object_or_404 # Nhớ import thêm get_object_or_404
-from .models import Course, Section, Lesson
+from .models import Course, Section, Lesson, LessonProgress
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.contrib.auth.decorators import login_required
 
 def course_list(request):
     # Lấy toàn bộ khóa học từ Database
@@ -27,17 +30,45 @@ def course_detail(request, slug):
     return render(request, 'courses/course_detail.html', context)
 
 # TÌM HÀM NÀY VÀ SỬA LẠI THAM SỐ VÀ LỆNH GET:
-def lesson_detail(request, course_slug, lesson_id): # <-- Sửa lesson_slug thành lesson_id
+def lesson_detail(request, course_slug, lesson_id):
+    # Lấy thông tin bài học và khóa học
     course = get_object_or_404(Course, slug=course_slug)
+    lesson = get_object_or_404(Lesson, id=lesson_id)
     
-    # Sửa lesson_slug=lesson_slug thành id=lesson_id
-    lesson = get_object_or_404(Lesson, id=lesson_id, section__course=course) 
-    
-    sections = course.sections.all().order_by('order')
-    
+	# hiển thị danh sách các bài học 
+    sections = course.sections.all()     
+    # xử lý tiến độ 
+    user_progress = None
+    if request.user.is_authenticated:
+        user_progress = LessonProgress.objects.filter(user=request.user, lesson=lesson).first()
+
     context = {
         'course': course,
         'lesson': lesson,
-        'sections': sections,
+        'sections': sections,       
+        'user_progress': user_progress,
     }
     return render(request, 'courses/lesson_detail.html', context)
+
+
+# xử lý logic lưu bài và hoàn thành bài 
+@login_required
+@require_POST
+def toggle_progress(request, lesson_id):
+    action_type = request.POST.get('type') # 'complete' hoặc 'save'
+    progress, created = LessonProgress.objects.get_or_create(
+        user=request.user, 
+        lesson_id=lesson_id
+    )
+    
+    if action_type == 'complete':
+        progress.is_completed = not progress.is_completed
+    elif action_type == 'save':
+        progress.is_saved = not progress.is_saved
+        
+    progress.save()
+    return JsonResponse({
+        'status': 'success',
+        'is_completed': progress.is_completed,
+        'is_saved': progress.is_saved
+    })

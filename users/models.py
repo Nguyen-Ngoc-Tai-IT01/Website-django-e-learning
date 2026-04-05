@@ -1,5 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from courses.models import LessonProgress
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 class CustomUser(AbstractUser):
     # Phân quyền cơ bản
@@ -28,3 +31,23 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.user.username}"
+    
+@login_required
+def user_profile(request):
+    # Lấy danh sách các bài học đã LƯU
+    saved_lessons = LessonProgress.objects.filter(
+        user=request.user, 
+        is_saved=True
+    ).select_related('lesson', 'lesson__course') # Dùng select_related để tối ưu truy vấn Database
+    
+    # Đếm số bài đã HOÀN THÀNH
+    completed_count = LessonProgress.objects.filter(
+        user=request.user, 
+        is_completed=True
+    ).count()
+
+    context = {
+        'saved_lessons': saved_lessons,
+        'completed_count': completed_count,
+    }
+    return render(request, 'profile.html', context)
