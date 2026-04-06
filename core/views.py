@@ -9,4 +9,4 @@ def home(request):
     # Nếu CHƯA ĐĂNG NHẬP (Khách vãng lai)
     else:
         # Nhảy vào trang giới thiệu (Tài tự tạo thêm 1 file intro.html nhé)
-        return render(request, 'core/introduce.html')
+        return render(request, 'core/index.html')

@@ -19,6 +19,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True)
     phone = models.CharField(max_length=15, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
+    is_instructor_pending = models.BooleanField(default=False, verbose_name="Đang chờ duyệt giảng viên")
     
     GENDER_CHOICES = (
         ('M', 'Nam'),

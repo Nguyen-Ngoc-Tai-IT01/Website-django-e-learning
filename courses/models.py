@@ -29,6 +29,7 @@ class Course(models.Model):
     thumbnail = models.ImageField(upload_to='course_thumbnails/', null=True, blank=True)
     level = models.CharField(max_length=20, choices=LEVEL_CHOICES, default='beginner')
     is_published = models.BooleanField(default=False)
+    order = models.PositiveIntegerField(default=0, verbose_name="Số thứ tự (Lộ trình)")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -107,3 +108,17 @@ class Review(models.Model):
 
     def __str__(self):
         return f"Review by {self.user.username} for {self.course.title}"
+    
+class Document(models.Model):
+    title = models.CharField(max_length=255, verbose_name="Documents/Books")
+    cover_image = models.ImageField(upload_to='document_covers/', null=True, blank=True, verbose_name="Ảnh bìa")
+    file = models.FileField(upload_to='documents/', verbose_name="File tài liệu (PDF, Word...)")
+    description = models.TextField(blank=True, verbose_name="Mô tả ngắn")
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-uploaded_at'] # Sách mới up sẽ hiện lên đầu
+        verbose_name_plural = "Tài liệu & Sách"
+
+    def __str__(self):
+        return self.title

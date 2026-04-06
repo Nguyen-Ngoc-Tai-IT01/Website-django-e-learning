@@ -5,6 +5,9 @@ from django.contrib.auth import get_user_model
 import re
 from django.contrib.auth.decorators import login_required
 from courses.models import LessonProgress
+from .models import Profile
+from .forms import UserUpdateForm
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 # Gọi model CustomUser mà Tài đã tạo hôm trước
 User = get_user_model()
@@ -86,3 +89,40 @@ def user_profile(request):
         'completed_count': completed_count,
     }
     return render(request, 'users/profile.html', context)
+
+@login_required
+def apply_instructor(request):
+    # Dùng get_or_create thay cho request.user.profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    if not request.user.is_staff:
+        profile.is_instructor_pending = True
+        profile.save()
+        messages.success(request, "Yêu cầu làm giảng viên đã được gửi! Đợi Admin duyệt nhé.")
+        
+    return redirect('users:profile')
+
+@login_required
+def edit_profile(request):
+    # Đảm bảo user có profile
+    profile, created = Profile.objects.get_or_create(user=request.user)
+
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        # Bắt buộc thêm request.FILES để nhận ảnh
+        p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile) 
+        
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'Hồ sơ của bạn đã được cập nhật thành công!')
+            return redirect('users:profile')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, 'users/edit_profile.html', context)

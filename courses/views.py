@@ -1,17 +1,27 @@
-from django.shortcuts import render, get_object_or_404 # Nhớ import thêm get_object_or_404
-from .models import Course, Section, Lesson, LessonProgress
+from django.shortcuts import render, get_object_or_404
+from .models import Course, Section, Lesson, LessonProgress, Document, Category
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q, Prefetch
 
 def course_list(request):
-    # Lấy toàn bộ khóa học từ Database
-    # (Nếu Tài có cột trạng thái xuất bản, có thể dùng Course.objects.filter(is_published=True))
-    courses = Course.objects.all()
+    # Lấy từ khóa người dùng gõ vào ô tìm kiếm (biến 'q')
+    query = request.GET.get('q')
     
-    # Đóng gói dữ liệu vào biến 'courses' và gửi ra file HTML
+    if query:
+        # Nếu có gõ tìm kiếm: Lọc khóa học có chứa từ khóa trong Tiêu đề HOẶC Mô tả
+        # icontains: tìm kiếm không phân biệt chữ hoa/thường
+        courses = Course.objects.filter(
+            Q(title__icontains=query) | Q(description__icontains=query)
+        )
+    else:
+        # Nếu không tìm kiếm gì: Hiển thị toàn bộ khóa học như cũ
+        courses = Course.objects.all()
+    
     context = {
-        'courses': courses
+        'courses': courses,
+        'query': query, # Truyền từ khóa ra giao diện để hiển thị
     }
     return render(request, 'courses/course_list.html', context)
 
@@ -72,3 +82,30 @@ def toggle_progress(request, lesson_id):
         'is_completed': progress.is_completed,
         'is_saved': progress.is_saved
     })
+    
+# 1. Hàm hiển thị danh sách toàn bộ sách (Trang Thư viện)
+def document_list(request):
+    documents = Document.objects.all()
+    return render(request, 'courses/document_list.html', {'documents': documents})
+
+# # 2. Hàm hiển thị chi tiết 1 cuốn sách để đọc (Trang Đọc sách)
+# def document_detail(request, doc_id):
+#     document = get_object_or_404(Document, id=doc_id)
+    
+#     is_pdf = False
+#     if document.file:
+#         ext = document.file.name.split('.')[-1].lower()
+#         is_pdf = ext == 'pdf'
+    
+#     return render(request, 'courses/document_detail.html', {
+#         'document': document,
+#         'is_pdf': is_pdf,          
+#     })
+
+def roadmap(request):
+    # Lấy tất cả Danh mục, và ÉP các khóa học bên trong phải được sắp xếp chuẩn theo cột 'order' (từ nhỏ đến lớn)
+    categories = Category.objects.prefetch_related(
+        Prefetch('courses', queryset=Course.objects.order_by('order'))
+    ).all()
+    
+    return render(request, 'courses/roadmap.html', {'categories': categories})

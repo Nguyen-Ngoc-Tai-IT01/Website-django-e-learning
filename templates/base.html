@@ -99,7 +99,7 @@
     >
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
-          <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-3 shrink-0">
             <div
               class="w-8 h-8 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20"
             >
@@ -110,27 +110,7 @@
             >
           </div>
 
-          <div class="hidden md:block">
-            <div class="ml-10 flex items-baseline space-x-8">
-              <a
-                href="{% url 'courses:course_list' %}"
-                class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
-                >Khóa học</a
-              >
-              <a
-                href="#"
-                class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
-                >Lộ trình</a
-              >
-              <a
-                href="#"
-                class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
-                >Tài liệu</a
-              >
-            </div>
-          </div>
-
-          <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-3 shrink-0">
             {% if request.user.is_authenticated %}
             <div class="flex items-center gap-4">
               <span class="text-slate-300 text-sm font-medium">
@@ -167,6 +147,59 @@
             {% endif %}
           </div>
         </div>
+
+        <div
+          class="hidden md:flex items-center justify-between py-3 border-t border-slate-800/60"
+        >
+          <div class="flex items-baseline space-x-8">
+            <a
+              href="{% url 'courses:course_list' %}"
+              class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
+              >Khóa học</a
+            >
+            <a
+              href="{% url 'courses:roadmap' %}"
+              class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
+              >Lộ trình</a
+            >
+            <a
+              href="{% url 'courses:document_list' %}"
+              class="text-slate-300 hover:text-white transition-colors text-sm font-medium"
+              >Tài liệu</a
+            >
+          </div>
+
+          <form
+            action="{% url 'courses:course_list' %}"
+            method="GET"
+            class="relative w-full max-w-md group"
+          >
+            <div
+              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"
+            >
+              <svg
+                class="h-4 w-4 text-slate-500 group-focus-within:text-blue-500 transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+            <input
+              type="text"
+              name="q"
+              value="{{ request.GET.q }}"
+              placeholder="Tìm khóa học, bài viết..."
+              class="block w-full pl-10 pr-3 py-2 border border-slate-700 rounded-full leading-5 bg-slate-800/50 text-slate-300 placeholder-slate-500 focus:outline-none focus:bg-slate-800 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition-all duration-300"
+            />
+          </form>
+        </div>
       </div>
     </nav>
 
@@ -185,7 +218,7 @@
                 T
               </div>
               <span class="text-white font-bold text-xl tracking-tight"
-                >Tài Platform</span
+                >E-Learning System</span
               >
             </div>
             <p class="text-slate-400 text-sm leading-relaxed mb-6">
