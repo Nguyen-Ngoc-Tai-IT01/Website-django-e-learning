@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 import re
 from django.contrib.auth.decorators import login_required
-from courses.models import LessonProgress
+from courses.models import LessonProgress, CourseEnrollment
 from .models import Profile
 from .forms import UserUpdateForm
 from .forms import UserUpdateForm, ProfileUpdateForm
@@ -73,22 +73,33 @@ def user_logout(request):
 
 @login_required
 def user_profile(request):
-    # Lôi dữ liệu 1 đường thẳng từ Lesson -> Section -> Course
+    # 1. Khắc phục triệt để lỗi "User has no profile" lúc trước
+    profile, created = Profile.objects.get_or_create(user=request.user)
+    
+    # 2. THÊM MỚI: Lấy danh sách các khóa học mà user này đã bấm "Đăng ký"
+    enrolled_courses = CourseEnrollment.objects.filter(
+        user=request.user
+    ).select_related('course')
+
+    # 3. GIỮ NGUYÊN: Lôi dữ liệu 1 đường thẳng từ Lesson -> Section -> Course
     saved_lessons = LessonProgress.objects.filter(
         user=request.user, 
         is_saved=True
     ).select_related('lesson__section__course') 
     
+    # 4. GIỮ NGUYÊN: Đếm số bài giảng đã hoàn thành
     completed_count = LessonProgress.objects.filter(
         user=request.user, 
         is_completed=True
     ).count()
 
+    # Đóng gói tất cả bỏ vào context gửi ra giao diện
     context = {
         'saved_lessons': saved_lessons,
         'completed_count': completed_count,
+        'enrolled_courses': enrolled_courses, # <--- Nhớ có dòng này để mang ra HTML
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'users/profile.html', context)	
 
 @login_required
 def apply_instructor(request):

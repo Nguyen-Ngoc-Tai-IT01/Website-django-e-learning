@@ -89,7 +89,7 @@ class LessonProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='progress')
     is_completed = models.BooleanField(default=False)
-    is_saved = models.BooleanField(default=False) # 👈 THÊM DÒNG NÀY VÀO NÈ
+    is_saved = models.BooleanField(default=False) 
     completed_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

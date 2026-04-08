@@ -26,7 +26,6 @@ class Profile(models.Model):
         ('F', 'Nữ'),
         ('O', 'Khác'),
     )
-    # Đã thêm null=True vào đây để SQL Server không báo lỗi nữa
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
     address = models.CharField(max_length=255, blank=True)
 

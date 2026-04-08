@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Course, Section, Lesson, LessonProgress, Document, Category
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Course, Section, Lesson, LessonProgress, Document, Category, CourseEnrollment
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Prefetch
+from django.contrib import messages
 
 def course_list(request):
     # Lấy từ khóa người dùng gõ vào ô tìm kiếm (biến 'q')
@@ -26,19 +27,32 @@ def course_list(request):
     return render(request, 'courses/course_list.html', context)
 
 def course_detail(request, slug):
-    # 1. Tìm khóa học có slug khớp với URL, nếu không thấy thì báo lỗi 404
     course = get_object_or_404(Course, slug=slug)
+    sections = course.sections.all()
     
-    # 2. Lấy tất cả các Chương (Section) thuộc về khóa học này
-    # Lưu ý: Mặc định Django tự tạo biến 'section_set' để móc nối dữ liệu con
-    sections = course.sections.all().order_by('order')
-    
-    context = {
-        'course': course,
+    # Kiểm tra xem User đã đăng ký khóa này chưa
+    is_enrolled = False
+    if request.user.is_authenticated:
+        is_enrolled = CourseEnrollment.objects.filter(user=request.user, course=course).exists()
+        
+    return render(request, 'courses/course_detail.html', {
+        'course': course, 
         'sections': sections,
-    }
-    return render(request, 'courses/course_detail.html', context)
+        'is_enrolled': is_enrolled # Ném biến này ra HTML
+    })
 
+# 2. Thêm hàm xử lý khi người dùng bấm nút "Đăng ký"
+@login_required
+def enroll_course(request, slug):
+    if request.method == 'POST':
+        course = get_object_or_404(Course, slug=slug)
+        # get_or_create giúp tạo bản ghi mới, nếu họ bấm 2 lần thì cũng không bị lỗi tạo trùng
+        CourseEnrollment.objects.get_or_create(user=request.user, course=course)
+        
+        messages.success(request, f"Chúc mừng bạn đã đăng ký thành công khóa học: {course.title}!")
+        
+    # Xong việc thì load lại trang chi tiết khóa học đó
+    return redirect('courses:course_detail', slug=slug)
 # TÌM HÀM NÀY VÀ SỬA LẠI THAM SỐ VÀ LỆNH GET:
 def lesson_detail(request, course_slug, lesson_id):
     # Lấy thông tin bài học và khóa học

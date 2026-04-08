@@ -1,12 +1,20 @@
 from django.shortcuts import render
+from courses.models import Course
 
 def home(request):
-    # Nếu người dùng ĐÃ ĐĂNG NHẬP
-    if request.user.is_authenticated:
-        # Nhảy vào trang xịn xò Tài vừa code xong
-        return render(request, 'core/home.html') 
+    # 1. Bốc ngẫu nhiên 3 khóa học (Chuẩn bị sẵn dữ liệu)
+    random_courses = Course.objects.filter(is_published=True).order_by('?')[:3]
     
-    # Nếu CHƯA ĐĂNG NHẬP (Khách vãng lai)
+    # 2. Đóng gói dữ liệu vào một biến context
+    context = {
+        'random_courses': random_courses
+    }
+
+    # 3. Kiểm tra xem người dùng là ai để điều hướng
+    if request.user.is_authenticated:
+        # Nếu ĐÃ ĐĂNG NHẬP: Vào trang Dashboard/Home và mang theo 3 khóa học
+        return render(request, 'core/home.html', context) 
+    
     else:
-        # Nhảy vào trang giới thiệu (Tài tự tạo thêm 1 file intro.html nhé)
-        return render(request, 'core/index.html')
+        # Nếu CHƯA ĐĂNG NHẬP: Vào trang Landing Page/Index và cũng mang theo 3 khóa học
+        return render(request, 'core/index.html', context)
